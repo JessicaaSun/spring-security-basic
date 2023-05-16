@@ -17,24 +17,41 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
     // set up user credential
-    @Bean
-    public InMemoryUserDetailsManager userDetailService(){
-        UserDetails user1 = User.withUsername("jessica").password("4321").roles("USER").build();
-        UserDetails user2 = User.withUsername("James").password("1234").roles("ADMIN").build();
-        return new InMemoryUserDetailsManager(user1, user2);
-    }
+
+    // in memory is mainly for testing
+    // H2 -> in memory
+//    @Bean
+//    public InMemoryUserDetailsManager userDetailService(){
+//        UserDetails user1 = User.withUsername("jessica").password("4321").roles("USER").build();
+//        UserDetails user2 = User.withUsername("James").password("1234").roles("ADMIN").build();
+//        return new InMemoryUserDetailsManager(user1, user2);
+//    }
+
+
     // config the security
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/admin/**")
-                .hasRole("ADMIN")
+//        httpSecurity.csrf().disable()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/admin/**")
+//                .hasRole("ADMIN")
+//                .requestMatchers("/user/**")
+//                .hasRole("USER")
+//                .requestMatchers("/home/**")
+//                .anonymous()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .formLogin();
+        httpSecurity.csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/home/homepage", "/home/feed", "/email/**")
+                .permitAll()
                 .requestMatchers("/user/**")
                 .hasRole("USER")
-                .requestMatchers("/home/**")
-                .anonymous()
-                .anyRequest()
-                .authenticated()
+                .requestMatchers("/admin/**")
+                .hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin();
         return httpSecurity.build();
