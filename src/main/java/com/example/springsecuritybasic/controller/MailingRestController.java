@@ -24,4 +24,15 @@ public class MailingRestController {
         }
     }
 
+    @PostMapping("/sendingmailv2")
+    public String sendMailV2(){
+        try{
+            mailingService.sendMailWithDecoration();
+            return "Successfully sent email";
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return "Fail to send mail";
+        }
+    }
+
 }
